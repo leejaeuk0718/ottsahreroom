@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket 테스트</title>
+    <!-- SockJS와 STOMP를 반드시 위에 추가해야 함 -->
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+<meta charset="UTF-8">
+<body>
+<h2>WebSocket 메시지 보내기</h2>
+<input type="text" id="messageInput" placeholder="메시지를 입력하세요">
+<button onclick="sendMessage()">전송</button>
+
+<script>
+    // SockJS 객체를 먼저 생성
+    const socket = new SockJS("http://localhost:8080/ws");
+    const stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, function () {
+        console.log("웹소켓 연결 성공");
+        stompClient.subscribe('/topic/messages/1', function (message) {
+            console.log("서버로부터 메시지:", message.body);
+        });
+    });
+
+    function sendMessage() {
+        const message = document.getElementById("messageInput").value;
+
+        const payload = {
+            message: message,
+            ottShareRoom: { id: 1 },
+            ottRoomMemberResponse: {
+                id: 10,
+                user: {
+                    userId: 1,
+                    username: "testuser",
+                    nickname: "테스트유저",
+                    email: "test@example.com",
+                    password: "SOCIAL_USER",
+                    phoneNumber: "000-0000-0000",
+                    account: "12345678",
+                    accountHolder: "테스트유저",
+                    bank: "KAKAO",
+                    role: "SOCIAL",
+                    isShareRoom: false
+                },
+                isLeader: true,
+                isChecked: false
+            }
+        };
+
+        stompClient.send("/app/chat/1", {}, JSON.stringify(payload));
+    }
+</script>
+</body>
+</html>

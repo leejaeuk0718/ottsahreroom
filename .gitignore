@@ -1,0 +1,14 @@
+# Build
+.gradle/
+build/
+
+# IDE
+.idea/
+*.iml
+
+# Config (중요)
+application.yml
+.env
+
+# Log
+*.log
