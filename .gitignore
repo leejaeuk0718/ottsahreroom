@@ -6,8 +6,9 @@ build/
 .idea/
 *.iml
 
-# Config (중요)
+# Spring config
 application.yml
+application-*.yml
 .env
 
 # Log
