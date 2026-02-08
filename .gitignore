@@ -10,6 +10,7 @@ build/
 application.yml
 application-*.yml
 .env
+/query
 
 # Log
 *.log
